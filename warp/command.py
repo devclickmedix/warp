@@ -6,7 +6,7 @@ from twisted.python import usage, reflect
 from twisted.python.filepath import FilePath
 
 from warp.webserver import resource, site
-from warp.common import store, translate
+from warp.common import store, translate, db_session
 from warp import runtime
 
 
@@ -124,6 +124,7 @@ def loadConfig(options):
 
     store.setupStore()
     translate.loadMessages()
+    runtime.config["db_session"] = db_session.setupSession()
 
     factory = site.WarpSite(resource.WarpResourceWrapper())
     runtime.config['warpSite'] = factory
