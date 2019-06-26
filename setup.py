@@ -15,13 +15,13 @@ setup(name="warp",
 
       packages = find_packages('.') + ["twisted.plugins"],
 
-      install_requires = [
-        "twisted >= 8.2",
-        "storm >= 0.12",
-        "Mako >= 0.2.5",
-        "pytz",
-        "simplejson",
-        ],
+      # install_requires = [
+      #   "twisted >= 8.2",
+      #   "storm >= 0.12",
+      #   "Mako >= 0.2.5",
+      #   "pytz",
+      #   "simplejson",
+      #   ],
 
       package_data = {
         "twisted": ['plugins/warp_plugin.py'],
