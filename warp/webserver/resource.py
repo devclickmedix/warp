@@ -65,6 +65,10 @@ class WarpResourceWrapper(object):
         session = request.getSession()
         request.avatar = session.avatar
 
+        getCurrentUser = config.get('getCurrentUser')
+        if getCurrentUser and request.avatar:
+            request.current_user = getCurrentUser(request.avatar.id)
+
         getRequestStore = config.get('getRequestStore')
         if getRequestStore is not None:
             request.store = getRequestStore(request)

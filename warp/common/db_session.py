@@ -2,6 +2,7 @@
 from warp.runtime import config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 
 def setupSession():
@@ -12,4 +13,5 @@ def setupSession():
         isolation_level=config.get("isolation_level", "READ COMMITTED"),
         echo=config.get("trace"))
     Session = sessionmaker(bind=engine)
-    return Session()
+    Base = declarative_base()
+    return Session(), Base

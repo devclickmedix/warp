@@ -29,6 +29,9 @@ exposedStormClasses = {}
 
 messages = {}
 
+db_session = None
+db_base = None
+
 def expose(modelClass, crudClass):
     exposedStormClasses[unicode(modelClass.__name__)] = (modelClass, crudClass)
     

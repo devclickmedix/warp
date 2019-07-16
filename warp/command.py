@@ -124,7 +124,10 @@ def loadConfig(options):
 
     store.setupStore()
     translate.loadMessages()
-    runtime.config["db_session"] = db_session.setupSession()
+
+    _session, _base = db_session.setupSession()
+    runtime.db_session = _session
+    runtime.db_base = _base
 
     factory = site.WarpSite(resource.WarpResourceWrapper())
     runtime.config['warpSite'] = factory
