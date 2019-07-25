@@ -4,7 +4,7 @@ from twisted.web.server import Session, Site, Request
 
 from warp.common.avatar import Avatar
 from warp.runtime import config, avatar_store
-from warp.common.avatar import SessionManager #DBSession
+from warp.common.avatar import sessionManagerFactory, SessionManager #DBSession
 
 
 class WarpRequest(Request):
@@ -34,7 +34,7 @@ class WarpRequest(Request):
 class WarpSite(Site):
 
     requestFactory = WarpRequest
-    sessionManager = SessionManager()
+    sessionManager = sessionManagerFactory() #SessionManager()
 
     def makeSession(self):
         return self.sessionManager.createSession()

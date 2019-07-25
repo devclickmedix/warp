@@ -2,9 +2,10 @@ from zope.interface import implements
 
 from twisted.web.resource import IResource
 
-from warp.common.avatar import Avatar
+from warp.common.avatar import Avatar, JWTSession
 from warp.runtime import avatar_store, config
-
+import jwt
+from datetime import datetime, timedelta
 
 
 class LoginBase(object):
@@ -54,8 +55,22 @@ class LoginHandler(LoginBase):
                                             _domain="_warp:login")
             return False
 
-        request.session.setAvatarID(avatar.id)
-        request.avatar = request.session.avatar
+        if config.get("jwt") and config["jwt"].get("session"):
+            jwt_secret = config["jwt"].get("jwt_secret") or "jwt_secret"
+            dt = datetime.utcnow() + timedelta(days=1)
+            payload = {
+                'avatar_id': avatar.id,
+                'username': email,
+                'exp': int(dt.strftime("%s"))
+            }
+            encoded = jwt.encode(payload, jwt_secret, algorithm='HS256')
+            request.session = JWTSession(encoded)
+
+            cookiename = b"_".join([b'TWISTED_SESSION'] + request.sitepath)
+            request.addCookie(cookiename, request.session.uid, path=b'/')
+        else:
+            request.session.setAvatarID(avatar.id)
+            request.avatar = request.session.avatar
 
         return True
 

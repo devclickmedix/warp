@@ -45,6 +45,27 @@ def nowstamp():
     return int(time.mktime(datetime.utcnow().timetuple()))
 
 
+def sessionManagerFactory():
+    if runtime.config.get("jwt") and runtime.config["jwt"].get("session"):
+        return JWTSessionManager()
+    return SessionManager()
+
+
+class JWTSession(object):
+    def __init__(self, uid=""):
+        self.uid = uid
+        self.isPersistent = True
+
+
+class JWTSessionManager(object):
+
+    def createSession(self):
+        return None
+
+    def getSession(self, uid):
+        return JWTSession(uid)
+
+
 class SessionManager(object):
     """
     Default DB-backed session handling
